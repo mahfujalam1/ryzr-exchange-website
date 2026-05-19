@@ -1,0 +1,81 @@
+"use client";
+
+import Marquee from "react-fast-marquee";
+
+const leaders = [
+  {
+    name: "Emirates",
+    logo: "https://logos-world.net/wp-content/uploads/2020/03/Emirates-Logo.png",
+  },
+  {
+    name: "Delta",
+    logo: "https://logos-world.net/wp-content/uploads/2021/08/Delta-Logo.png",
+  },
+  {
+    name: "United Airlines",
+    logo: "https://logos-world.net/wp-content/uploads/2020/11/United-Airlines-Logo.png",
+  },
+  {
+    name: "Lufthansa",
+    logo: "https://logos-world.net/wp-content/uploads/2020/10/Lufthansa-Logo.png",
+  },
+  {
+    name: "Qatar Airways",
+    logo: "https://logos-world.net/wp-content/uploads/2020/03/Qatar-Airways-Logo.png",
+  },
+  {
+    name: "American Airlines",
+    logo: "https://logos-world.net/wp-content/uploads/2020/11/American-Airlines-Logo.png",
+  },
+  {
+    name: "British Airways",
+    logo: "https://logos-world.net/wp-content/uploads/2021/02/British-Airways-Logo.png",
+  },
+  {
+    name: "Air France",
+    logo: "https://logos-world.net/wp-content/uploads/2020/01/Air-France-Logo.png",
+  },
+];
+
+export default function TrustedLeaders() {
+  return (
+    <section className="py-10 overflow-hidden relative">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Left-aligned header */}
+        <p className="text-lg font-bold text-gray-800 tracking-widest uppercase mb-8">
+          Trusted by industry leaders
+        </p>
+      </div>
+
+      {/* Infinite Scrolling Marquee */}
+      <div className="relative w-full overflow-hidden container mx-auto">
+        {/* Fading side masks for transition */}
+        <div className="absolute inset-y-0 left-0 w-16 sm:w-32 z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-16 sm:w-32 z-10 pointer-events-none" />
+
+        <div className="[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          <Marquee
+            speed={45}
+            gradient={false}
+            pauseOnHover={true}
+            className="flex"
+          >
+            {[...leaders, ...leaders, ...leaders].map((leader, index) => (
+              <div
+                key={`${leader.name}-${index}`}
+                className="mx-8 sm:mx-12 flex items-center justify-center h-10 sm:h-16 md:h-20 select-none"
+              >
+                <img
+                  src={leader.logo}
+                  alt={leader.name}
+                  referrerPolicy="no-referrer"
+                  className="h-7 sm:h-12 md:h-16 w-auto object-contain opacity-95 hover:opacity-100 hover:scale-105 transition-all duration-300 pointer-events-none"
+                />
+              </div>
+            ))}
+          </Marquee>
+        </div>
+      </div>
+    </section>
+  );
+}
