@@ -4,7 +4,7 @@ export default function Stats() {
   return (
     <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-16">
       <div className="py-8 md:py-10 border-2 border-gray-200 rounded-xl">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 divide-none md:divide-y-0 md:divide-x divide-neutral-300">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x divide-neutral-300">
           {/* Stat 1 */}
           <div className="flex items-center gap-4 px-2 sm:px-6 justify-center md:justify-start">
             <div className="text-primary text-5xl">

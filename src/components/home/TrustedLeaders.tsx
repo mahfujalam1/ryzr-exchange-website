@@ -63,13 +63,13 @@ export default function TrustedLeaders() {
             {[...leaders, ...leaders, ...leaders].map((leader, index) => (
               <div
                 key={`${leader.name}-${index}`}
-                className="mx-8 sm:mx-12 flex items-center justify-center h-10 sm:h-16 md:h-20 select-none"
+                className="mx-8 sm:mx-12 flex items-center justify-center h-10 sm:h-16 md:h-32 select-none"
               >
                 <img
                   src={leader.logo}
                   alt={leader.name}
                   referrerPolicy="no-referrer"
-                  className="h-7 sm:h-12 md:h-16 w-auto object-contain opacity-95 hover:opacity-100 hover:scale-105 transition-all duration-300 pointer-events-none"
+                  className="h-10 sm:h-12 md:h-16 w-auto object-contain opacity-95 hover:opacity-100 hover:scale-105 transition-all duration-300 pointer-events-none"
                 />
               </div>
             ))}
