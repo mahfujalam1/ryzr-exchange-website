@@ -123,7 +123,7 @@ export default function Hero() {
               <span className="block">CAREER STARTS</span>
               <span
                 className="block italic text-[#82e600] font-normal [font-synthesis:none]"
-                style={{ fontFamily: "var(--font-marker)" }}
+                style={{ fontFamily: "var(--font-third-rail)" }}
               >
                 HERE
               </span>

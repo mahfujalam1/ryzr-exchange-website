@@ -65,7 +65,7 @@ export default function AppPromo() {
             </div>
 
             {/* App Download Buttons */}
-            <div className="flex flex-wrap gap-4 mt-8 w-full sm:w-auto">
+            <div className="md:flex flex-wrap gap-4 mt-8 w-full sm:w-auto space-y-3 md:space-y-0">
               <a
                 href="https://apps.apple.com"
                 target="_blank"

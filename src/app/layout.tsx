@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Permanent_Marker } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -12,6 +13,11 @@ const permanentMarker = Permanent_Marker({
   variable: "--font-marker",
   weight: "400",
   subsets: ["latin"],
+});
+
+const thirdRail = localFont({
+  src: "../../public/Third Rail - Demo.ttf",
+  variable: "--font-third-rail",
 });
 
 export const metadata: Metadata = {
@@ -79,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} ${permanentMarker.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${permanentMarker.variable} ${thirdRail.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary-light selection:text-primary">
         {children}
