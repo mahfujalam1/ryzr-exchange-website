@@ -8,6 +8,7 @@ import {
   countries as countriesList,
   type Country,
 } from "@/constants/countries";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Hero() {
   const router = useRouter();
@@ -254,7 +255,7 @@ export default function Hero() {
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full py-3 sm:py-3.5 bg-[#047857] hover:bg-[#035a41] text-white text-sm font-bold rounded-lg transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-1.5 uppercase tracking-wider"
+                  className="w-full cursor-pointer py-3 sm:py-3.5 bg-[#047857] hover:bg-[#035a41] text-white text-sm font-bold rounded-lg transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-1.5 uppercase tracking-wider"
                 >
                   Join the Community
                   <FiZap className="text-base text-white fill-current" />
@@ -274,9 +275,9 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={() => router.push("/join?provider=google")}
-                className="w-full py-2.5 border border-neutral-200 rounded-lg hover:bg-neutral-50 flex items-center justify-center transition-all hover:border-neutral-300 shadow-sm"
+                className="w-full cursor-pointer py-2.5 border border-neutral-200 rounded-lg hover:bg-neutral-50 flex items-center justify-center transition-all hover:border-neutral-300 shadow-sm"
               >
-                <img src="/google.svg" alt="google icon" />
+                <FcGoogle className="text-3xl" />
               </button>
 
               {/* Users */}
