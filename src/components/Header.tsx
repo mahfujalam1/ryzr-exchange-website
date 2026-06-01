@@ -17,7 +17,7 @@ export default function Header() {
           <img
             src="/ryzr-logo.svg"
             alt="Ryzr Exchange Logo"
-            className="h-8 sm:h-10 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+            className="h-5 sm:h-10 w-auto object-contain transition-transform group-hover:scale-[1.02]"
           />
         </Link>
 

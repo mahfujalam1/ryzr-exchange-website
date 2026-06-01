@@ -5,36 +5,32 @@ import Marquee from "react-fast-marquee";
 const leaders = [
   {
     name: "Emirates",
-    logo: "https://logos-world.net/wp-content/uploads/2020/03/Emirates-Logo.png",
+    logo: "/industryLeaders/Air-India-Logo.png",
   },
   {
     name: "Delta",
-    logo: "https://logos-world.net/wp-content/uploads/2021/08/Delta-Logo.png",
+    logo: "/industryLeaders/Airbus-Logo.png",
   },
   {
     name: "United Airlines",
-    logo: "https://logos-world.net/wp-content/uploads/2020/11/United-Airlines-Logo.png",
+    logo: "/industryLeaders/Boeing-Logo.png",
   },
   {
     name: "Lufthansa",
-    logo: "https://logos-world.net/wp-content/uploads/2020/10/Lufthansa-Logo.png",
+    logo: "/industryLeaders/Emirates-Logo.png",
   },
   {
     name: "Qatar Airways",
-    logo: "https://logos-world.net/wp-content/uploads/2020/03/Qatar-Airways-Logo.png",
+    logo: "/industryLeaders/image.png",
   },
   {
     name: "American Airlines",
-    logo: "https://logos-world.net/wp-content/uploads/2020/11/American-Airlines-Logo.png",
+    logo: "/industryLeaders/IndiGo-Logo.png",
   },
   {
     name: "British Airways",
-    logo: "https://logos-world.net/wp-content/uploads/2021/02/British-Airways-Logo.png",
-  },
-  {
-    name: "Air France",
-    logo: "https://logos-world.net/wp-content/uploads/2020/01/Air-France-Logo.png",
-  },
+    logo: "/industryLeaders/Qatar-Airways-Logo.png",
+  }
 ];
 
 export default function TrustedLeaders() {

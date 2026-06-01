@@ -117,7 +117,7 @@ export default function Hero() {
             </div>
 
             {/* Heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-neutral-900 leading-[1.08] text-left uppercase">
+            <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-neutral-900 leading-[1.08] text-left uppercase">
               <span className="block">YOUR AVIATION</span>
               <span className="block">CAREER STARTS</span>
               <span
@@ -135,35 +135,39 @@ export default function Hero() {
             </p>
 
             {/* Quick Phone Sign Up Card */}
-            <div className="w-full max-w-[450px] bg-white rounded-2xl border border-emerald-600/40 p-6 sm:p-7 shadow-xl shadow-emerald-950/[0.03] relative">
-              <h2 className="text-xs font-bold text-[#047857] tracking-wider uppercase mb-4 text-center sm:text-left">
+            <div className="w-full max-w-[450px] mx-auto md:mx-0 bg-white rounded-2xl border border-emerald-600/40 p-4 sm:p-6 lg:p-7 shadow-xl shadow-emerald-950/[0.03] relative">
+              <h2 className="text-[11px] sm:text-xs font-bold text-[#047857] tracking-wider uppercase mb-4 text-center sm:text-left leading-relaxed">
                 Join Ryzr Exchange - It's Free!
               </h2>
 
               <form
                 onSubmit={handleHeroSubmit}
-                className="flex flex-col gap-3.5"
+                className="flex flex-col gap-3"
               >
-                <div className="flex gap-2">
-                  {/* Custom Flag Dropdown */}
-                  <div className="relative shrink-0">
+                {/* Mobile Stack */}
+                <div className="flex flex-col sm:flex-row gap-2">
+                  {/* Country Dropdown */}
+                  <div className="relative w-full sm:w-auto sm:shrink-0">
                     <button
                       type="button"
                       onClick={() => setFlagDropdownOpen(!flagDropdownOpen)}
-                      className="flex items-center gap-1.5 px-3 py-3 border border-neutral-200 rounded-lg text-sm font-bold bg-neutral-50 text-neutral-700 cursor-pointer hover:bg-neutral-100/50 transition-colors focus:outline-none focus:border-emerald-500 h-[46px]"
+                      className="w-full sm:w-auto flex items-center justify-between gap-1.5 px-3 py-3 border border-neutral-200 rounded-lg text-sm font-bold bg-neutral-50 text-neutral-700 hover:bg-neutral-100/50 transition-colors focus:outline-none focus:border-emerald-500 min-h-[46px]"
                     >
-                      <img
-                        src={selectedCountry.flag}
-                        alt={selectedCountry.label}
-                        className="w-5 h-3.5 rounded-sm object-cover shrink-0 border border-neutral-200/50"
-                      />
-                      <span>{selectedCountry.code}</span>
+                      <div className="flex items-center gap-1.5">
+                        <img
+                          src={selectedCountry.flag}
+                          alt={selectedCountry.label}
+                          className="w-5 h-3.5 rounded-sm object-cover shrink-0 border border-neutral-200/50"
+                        />
+                        <span>{selectedCountry.code}</span>
+                      </div>
+
                       <svg
-                        className={`w-3 h-3 text-neutral-500 transition-transform duration-200 ${flagDropdownOpen ? "rotate-180" : ""}`}
+                        className={`w-3 h-3 text-neutral-500 transition-transform duration-200 ${flagDropdownOpen ? "rotate-180" : ""
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
                           strokeLinecap="round"
@@ -183,8 +187,8 @@ export default function Hero() {
                             setSearchQuery("");
                           }}
                         />
-                        <div className="absolute left-0 mt-1.5 w-64 bg-white border border-neutral-200 rounded-lg shadow-xl z-30 py-1.5 flex flex-col">
-                          {/* Search Country Input */}
+
+                        <div className="absolute left-0 mt-1.5 w-full sm:w-64 bg-white border border-neutral-200 rounded-lg shadow-xl z-30 py-1.5 flex flex-col">
                           <div className="px-2 pb-2 border-b border-neutral-100 mb-1">
                             <input
                               type="text"
@@ -196,7 +200,6 @@ export default function Hero() {
                             />
                           </div>
 
-                          {/* Country List Container */}
                           <div className="max-h-60 overflow-y-auto no-scrollbar">
                             {filteredCountries.length > 0 ? (
                               filteredCountries.map((c) => (
@@ -209,16 +212,18 @@ export default function Hero() {
                                     setFlagDropdownOpen(false);
                                     setSearchQuery("");
                                   }}
-                                  className="w-full px-3 py-2 text-left text-xs font-bold text-neutral-700 hover:bg-emerald-50 hover:text-[#047857] flex items-center gap-2.5 transition-colors cursor-pointer"
+                                  className="w-full px-3 py-2 text-left text-xs font-bold text-neutral-700 hover:bg-emerald-50 hover:text-[#047857] flex items-center gap-2.5 transition-colors"
                                 >
                                   <img
                                     src={c.flag}
                                     alt={c.label}
                                     className="w-5 h-3.5 rounded-sm object-cover shrink-0 border border-neutral-200/50"
                                   />
+
                                   <span className="truncate flex-1">
                                     {c.name}
                                   </span>
+
                                   <span className="text-neutral-400 font-mono text-[10px]">
                                     ({c.code})
                                   </span>
@@ -235,21 +240,23 @@ export default function Hero() {
                     )}
                   </div>
 
+                  {/* Phone Input */}
                   <input
                     type="tel"
                     placeholder="Enter your mobile number"
                     value={phoneNumber}
                     onChange={handlePhoneChange}
                     required
-                    className="flex-1 px-4 py-3 border border-neutral-200 rounded-lg text-sm bg-white font-semibold text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-emerald-500"
+                    className="flex-1 w-full min-w-0 px-4 py-3 border border-neutral-200 rounded-lg text-sm bg-white font-semibold text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
 
+                {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-[#047857] hover:bg-[#035a41] text-white text-sm font-bold rounded-lg transition-all shadow-md active:scale-99 flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
+                  className="w-full py-3 sm:py-3.5 bg-[#047857] hover:bg-[#035a41] text-white text-sm font-bold rounded-lg transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-1.5 uppercase tracking-wider"
                 >
-                  Join the Community{" "}
+                  Join the Community
                   <FiZap className="text-base text-white fill-current" />
                 </button>
               </form>
@@ -257,65 +264,28 @@ export default function Hero() {
               {/* Divider */}
               <div className="relative flex py-4 items-center justify-center text-[10px] text-neutral-400 font-extrabold uppercase tracking-wider">
                 <div className="flex-grow border-t border-neutral-200/60"></div>
-                <span className="flex-shrink mx-3">or continue with</span>
+                <span className="flex-shrink mx-3 text-center">
+                  or continue with
+                </span>
                 <div className="flex-grow border-t border-neutral-200/60"></div>
               </div>
 
-              {/* Social/Google Button */}
+              {/* Google Button */}
               <button
                 type="button"
                 onClick={() => router.push("/join?provider=google")}
-                className="w-full py-2.5 border border-neutral-200 rounded-lg hover:bg-neutral-50 flex items-center justify-center transition-all cursor-pointer hover:border-neutral-300 shadow-sm"
+                className="w-full py-2.5 border border-neutral-200 rounded-lg hover:bg-neutral-50 flex items-center justify-center transition-all hover:border-neutral-300 shadow-sm"
               >
-                <svg
-                  className="w-5 h-5 shrink-0"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    fill="#4285F4"
-                  />
-                  <path
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    fill="#34A853"
-                  />
-                  <path
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
-                    fill="#FBBC05"
-                  />
-                  <path
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
-                    fill="#EA4335"
-                  />
-                </svg>
+                <img src="/google.svg" alt="google icon" />
               </button>
 
-              {/* Avatar Cluster */}
-              <div className="mt-5 pt-4 border-t border-neutral-100 flex items-center gap-3 justify-center sm:justify-start">
+              {/* Users */}
+              <div className="mt-5 pt-4 border-t border-neutral-100 flex flex-col sm:flex-row items-center gap-3 justify-center sm:justify-start text-center sm:text-left">
                 <div className="flex -space-x-2.5">
-                  <img
-                    className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
-                    alt="user"
-                  />
-                  <img
-                    className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                    src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=100"
-                    alt="user"
-                  />
-                  <img
-                    className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
-                    alt="user"
-                  />
-                  <img
-                    className="w-8 h-8 rounded-full border-2 border-white object-cover"
-                    src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=100"
-                    alt="user"
-                  />
+                  <img src="/group-avatar.png" alt="group avatar" className="w-full h-7" />
                 </div>
-                <span className="text-[11px] sm:text-xs font-semibold text-neutral-500">
+
+                <span className="text-[11px] sm:text-xs font-semibold text-neutral-500 leading-relaxed">
                   <span className="text-[#047857] font-bold">50K+</span> Gen Z
                   dreamers already joined!
                 </span>

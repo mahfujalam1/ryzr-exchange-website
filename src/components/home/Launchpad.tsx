@@ -74,7 +74,7 @@ export default function Launchpad() {
 
             <Link
               href="/join"
-              className="px-10 py-2.5 bg-primary hover:bg-primary-hover text-white text-[14px] sm:text-[15px] font-bold rounded-md transition-all shadow-sm hover:shadow-md flex items-center gap-1.5 cursor-pointer relative overflow-hidden group active:scale-95"
+              className="px-10 py-2.5 bg-primary hover:bg-primary-hover text-white text-[10px] sm:text-[15px] font-bold rounded-md transition-all shadow-sm hover:shadow-md flex items-center gap-1.5 cursor-pointer relative overflow-hidden group active:scale-95"
             >
               Join the Community - It's Free{" "}
               <FiZap className="text-base text-white fill-current" />
