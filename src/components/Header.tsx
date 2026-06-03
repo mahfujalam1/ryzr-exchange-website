@@ -26,7 +26,7 @@ export default function Header() {
           <div className="flex items-center gap-1 text-sm sm:text-[15px] text-neutral-600 font-medium">
             <span>Already in the community?</span>
             <Link
-              href="/join"
+              href="/#app-promo"
               className="ml-2 px-4 py-2 border border-neutral-300 hover:border-primary text-neutral-700 hover:text-primary rounded-md font-semibold text-[14px] transition-all flex items-center gap-1 bg-white hover:bg-emerald-50/20"
             >
               Log in <FiChevronRight className="text-lg" />
@@ -71,7 +71,7 @@ export default function Header() {
               Already in the community?
             </p>
             <Link
-              href="/join"
+              href="/#app-promo"
               onClick={() => setMobileMenuOpen(false)}
               className="w-full text-center px-4 py-2.5 border border-neutral-300 hover:border-primary text-neutral-700 hover:text-primary rounded-md font-semibold text-sm transition-all flex items-center justify-center gap-1"
             >

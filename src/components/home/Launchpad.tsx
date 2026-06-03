@@ -49,7 +49,7 @@ export default function Launchpad() {
                 className="block italic text-[#16a34a] font-normal [font-synthesis:none]"
                 style={{ fontFamily: "var(--font-third-rail)" }}
               >
-                It s your launchpad
+                Its your launchpad
               </span>
             </h2>
 

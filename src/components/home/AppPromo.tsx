@@ -2,7 +2,7 @@ import { FiCheck, FiDownload } from "react-icons/fi";
 
 export default function AppPromo() {
   return (
-    <section className="py-16 md:py-24 container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="app-promo" className="py-16 md:py-24 container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Side: App Details */}
