@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiZap } from "react-icons/fi";
-import { FaGoogle } from "react-icons/fa";
 import {
   countries as countriesList,
   type Country,

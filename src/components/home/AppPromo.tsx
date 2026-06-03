@@ -15,8 +15,8 @@ export default function AppPromo() {
             <h2 className="text-3xl sm:text-4xl lg:text-[52px] font-bold text-neutral-900 tracking-tight leading-tight uppercase text-left">
               Take Your Aviation <br />
               <span
-                className="text-[#16a34a] italic font-normal inline-block mt-1 [font-synthesis:none]"
-                style={{ fontFamily: "var(--font-marker)" }}
+                className="block italic text-[#16a34a] font-normal [font-synthesis:none]"
+                style={{ fontFamily: "var(--font-third-rail)" }}
               >
                 Career Anywhere
               </span>

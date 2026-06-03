@@ -45,8 +45,11 @@ export default function Launchpad() {
             </p>
 
             <h2 className="text-3xl sm:text-4xl lg:text-[54px] text-primary">
-              <span className="font-[family-name:var(--font-marker)] italic text-[#16a34a] uppercase">
-                It's your launchpad.
+              <span
+                className="block italic text-[#16a34a] font-normal [font-synthesis:none]"
+                style={{ fontFamily: "var(--font-third-rail)" }}
+              >
+                It s your launchpad
               </span>
             </h2>
 
