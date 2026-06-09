@@ -120,23 +120,23 @@ export default function AppPromo() {
                 className="w-full h-auto object-contain max-h-[660px] relative z-10"
               />
 
-              {/* Top-Right Badge: 4.9★ App Rating */}
-              <div className="absolute top-[2%] right-[2%] sm:right-[12%] lg:right-[6%] xl:right-[24%] p-3 sm:p-5 bg-white/95 rounded-2xl shadow-lg flex flex-col items-center justify-center shrink-0 z-20 backdrop-blur-xs min-w-[95px] sm:min-w-[125px] border border-primary">
+              {/* Top-Right Badge: Target App Rating */}
+              <div className="absolute top-[2%] right-[2%] sm:right-[12%] lg:right-[6%] xl:right-[24%] p-3 sm:p-5 bg-white/95 rounded-2xl shadow-lg flex flex-col items-center justify-center shrink-0 z-20 backdrop-blur-xs min-w-[110px] sm:min-w-[140px] border border-primary">
+                <span className="text-[8px] sm:text-[9px] text-neutral-400 font-bold tracking-wider uppercase mb-1 text-center leading-tight">
+                  Target App Rating
+                </span>
                 <div className="flex items-center justify-center gap-1 text-xl sm:text-2xl font-bold text-[#16a34a]">
                   <span>4.9</span>
                   <span className="text-lg sm:text-xl">★</span>
                 </div>
-                <span className="text-[9px] sm:text-[10px] text-neutral-400 font-bold tracking-wider mt-1 sm:mt-1.5 uppercase">
-                  App Rating
-                </span>
               </div>
 
-              {/* Bottom-Left Badge: 500K+ Downloads */}
-              <div className="absolute bottom-[2%] left-[2%] sm:left-[18%] lg:left-[10%] xl:left-[24%] p-3 sm:p-5 bg-white/95 rounded-2xl shadow-lg flex flex-col items-center justify-center shrink-0 z-20 backdrop-blur-xs min-w-[95px] sm:min-w-[125px] border border-primary">
-                <span className="text-xl sm:text-2xl font-bold text-[#16a34a]">500K+</span>
-                <span className="text-[9px] sm:text-[10px] text-neutral-400 font-bold tracking-wider mt-1 sm:mt-1.5 uppercase">
-                  Downloads
+              {/* Bottom-Left Badge: Goal: 500,000 Downloads */}
+              <div className="absolute bottom-[2%] left-[2%] sm:left-[18%] lg:left-[10%] xl:left-[24%] p-3 sm:p-5 bg-white/95 rounded-2xl shadow-lg flex flex-col items-center justify-center shrink-0 z-20 backdrop-blur-xs min-w-[110px] sm:min-w-[140px] border border-primary text-center">
+                <span className="text-[8px] sm:text-[9px] text-neutral-400 font-bold tracking-wider uppercase mb-1">
+                  Goal: 500,000 Downloads
                 </span>
+                <span className="text-lg sm:text-xl font-bold text-[#16a34a]">500,000</span>
               </div>
             </div>
           </div>

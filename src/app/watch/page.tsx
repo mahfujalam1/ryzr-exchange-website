@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   FiArrowLeft,
   FiShare2,
@@ -22,7 +22,7 @@ interface Video {
   description: string;
 }
 
-const videos: Video[] = [
+export const videos: Video[] = [
   {
     id: 1,
     videoUrl:
@@ -75,7 +75,16 @@ const videos: Video[] = [
 
 export default function WatchPage() {
   const router = useRouter();
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const searchParams = useSearchParams();
+  const v = searchParams.get("v");
+  const [currentIndex, setCurrentIndex] = useState<number>(() => {
+    if (v) {
+      const id = parseInt(v, 10);
+      const index = videos.findIndex((video) => video.id === id);
+      if (index !== -1) return index;
+    }
+    return 0;
+  });
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [touchStart, setTouchStart] = useState<number>(0);
@@ -113,6 +122,17 @@ export default function WatchPage() {
     setShowPlayIcon(false);
   }, [currentIndex]);
 
+  // Sync URL with the current video ID only when it differs from the existing query parameter
+  useEffect(() => {
+    const id = videos[currentIndex].id;
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const currentParam = params.get('v');
+      if (currentParam !== id.toString()) {
+        router.replace(`/watch?v=${id}`);
+      }
+    }
+  }, [currentIndex]);
   const togglePlayPause = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -123,11 +143,9 @@ export default function WatchPage() {
       video.pause();
       setIsPlaying(false);
     }
-    // Show the play/pause icon briefly
     setShowPlayIcon(true);
     setTimeout(() => setShowPlayIcon(false), 800);
   };
-
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.touches[0].clientY);
   };
@@ -192,7 +210,7 @@ export default function WatchPage() {
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          onClick={() => router.push("/")}
+          onClick={() => router.back()}
           className="fixed sm:absolute top-6 left-6 z-50 w-12 h-12 bg-black/50 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center hover:bg-black/70 transition-all cursor-pointer"
         >
           <FiArrowLeft className="text-white text-2xl" />
@@ -332,9 +350,8 @@ export default function WatchPage() {
               }
             }}
             disabled={currentIndex === 0}
-            className={`w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all hover:bg-black/60 active:scale-90 ${
-              currentIndex === 0 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
-            }`}
+            className={`w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all hover:bg-black/60 active:scale-90 ${currentIndex === 0 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
+              }`}
             aria-label="Previous Video"
           >
             <FiChevronUp className="text-2xl" />
@@ -349,9 +366,8 @@ export default function WatchPage() {
               }
             }}
             disabled={currentIndex === videos.length - 1}
-            className={`w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all hover:bg-black/60 active:scale-90 ${
-              currentIndex === videos.length - 1 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
-            }`}
+            className={`w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all hover:bg-black/60 active:scale-90 ${currentIndex === videos.length - 1 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
+              }`}
             aria-label="Next Video"
           >
             <FiChevronDown className="text-2xl" />

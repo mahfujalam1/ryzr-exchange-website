@@ -12,10 +12,10 @@ export default function Stats() {
             </div>
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-primary">
-                50K+
+                Goal: 10k
               </h3>
               <p className="text-[11px] sm:text-xs text-neutral-400 font-semibold tracking-wider uppercase mt-0.5">
-                Gen Z Members
+                Members
               </p>
             </div>
           </div>
@@ -27,7 +27,7 @@ export default function Stats() {
             </div>
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-primary">
-                150+
+                Goal: 150+
               </h3>
               <p className="text-[11px] sm:text-xs text-neutral-400 font-semibold tracking-wider uppercase mt-0.5">
                 Training Partners
@@ -42,7 +42,7 @@ export default function Stats() {
             </div>
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-primary">
-                10K+
+                Goal: 10K+
               </h3>
               <p className="text-[11px] sm:text-xs text-neutral-400 font-semibold tracking-wider uppercase mt-0.5">
                 Job Opportunities
@@ -57,7 +57,7 @@ export default function Stats() {
             </div>
             <div>
               <h3 className="text-lg sm:text-xl font-bold text-primary">
-                100+
+                Goal: 100+
               </h3>
               <p className="text-[11px] sm:text-xs text-neutral-400 font-semibold tracking-wider uppercase mt-0.5">
                 Industry Leaders

@@ -39,7 +39,7 @@ export default function TrustedLeaders() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Left-aligned header */}
         <p className="text-lg font-bold text-gray-800 tracking-widest uppercase mb-8">
-          Trusted by industry leaders
+          Companies We Aspire to Work With
         </p>
       </div>
 

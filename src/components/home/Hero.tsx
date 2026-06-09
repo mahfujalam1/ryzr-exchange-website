@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FiZap } from "react-icons/fi";
 import {
@@ -8,71 +8,42 @@ import {
   type Country,
 } from "@/constants/countries";
 import { FcGoogle } from "react-icons/fc";
+import { isValidPhoneNumber, type CountryCode } from "libphonenumber-js";
 
 export default function Hero() {
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
+  const [countryCode, setCountryCode] = useState("+1");
+  const [phoneError, setPhoneError] = useState("");
 
   const defaultCountry =
-    countriesList.find((c) => c.code === "+91") || countriesList[0];
+    countriesList.find((c) => c.label === "CA") || countriesList[0];
   const [selectedCountry, setSelectedCountry] =
     useState<Country>(defaultCountry);
   const [flagDropdownOpen, setFlagDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    if (phoneNumber) {
+      const isValid = isValidPhoneNumber(phoneNumber, selectedCountry.label as CountryCode);
+      if (!isValid) {
+        setPhoneError(`Please enter a valid phone number for ${selectedCountry.name}`);
+      } else {
+        setPhoneError("");
+      }
+    } else {
+      setPhoneError("");
+    }
+  }, [phoneNumber, selectedCountry]);
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    // 1. Check if user typed or pasted starting with '+' or '00' (e.g. "+880..." or "00880...")
-    let normalized = value.trim();
-    if (normalized.startsWith("00")) {
-      normalized = "+" + normalized.slice(2);
-    }
-
-    if (normalized.startsWith("+")) {
-      const digits = normalized.replace(/\D/g, "");
-      // Sort countries by dial code length descending to match longer dial codes first (e.g. +880 before +88)
-      const sortedCountries = [...countriesList].sort(
-        (a, b) => b.code.length - a.code.length,
-      );
-
-      for (const country of sortedCountries) {
-        const codeDigits = country.code.replace("+", "");
-        if (digits.startsWith(codeDigits)) {
-          setSelectedCountry(country);
-          setCountryCode(country.code);
-          setPhoneNumber(digits.slice(codeDigits.length));
-          return;
-        }
-      }
-    }
-
-    // 2. Check if they typed a plain number starting with a known dial code directly (e.g. "88017...")
-    // Only auto-detect if the number is at least 6 digits to avoid false positives with short codes (like USA "1")
-    const numericOnly = value.replace(/\D/g, "");
-    if (numericOnly.length >= 6) {
-      const sortedCountries = [...countriesList].sort(
-        (a, b) => b.code.length - a.code.length,
-      );
-      for (const country of sortedCountries) {
-        const codeDigits = country.code.replace("+", "");
-        if (codeDigits.length >= 2 && numericOnly.startsWith(codeDigits)) {
-          setSelectedCountry(country);
-          setCountryCode(country.code);
-          setPhoneNumber(numericOnly.slice(codeDigits.length));
-          return;
-        }
-      }
-    }
-
-    // Default fallback: just set phone number
-    setPhoneNumber(numericOnly);
+    setPhoneNumber(e.target.value);
   };
 
   const handleHeroSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phoneNumber) return;
+    if (!phoneNumber || phoneError) return;
+
     // Route to join page with phone pre-filled
     router.push(
       `/join?phone=${encodeURIComponent(countryCode + " " + phoneNumber)}`,
@@ -241,15 +212,18 @@ export default function Hero() {
                   </div>
 
                   {/* Phone Input */}
-                  <input
-                    type="tel"
-                    placeholder="Enter your mobile number"
-                    value={phoneNumber}
-                    onChange={handlePhoneChange}
-                    required
-                    className="flex-1 w-full min-w-0 px-4 py-3 border border-neutral-200 rounded-lg text-sm bg-white font-semibold text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-emerald-500"
-                  />
+                  <div className="flex-1 w-full min-w-0">
+                    <input
+                      type="tel"
+                      placeholder="Enter your mobile number"
+                      value={phoneNumber}
+                      onChange={handlePhoneChange}
+                      required
+                      className={`w-full px-4 py-3 border rounded-lg text-sm bg-white font-semibold text-neutral-800 placeholder-neutral-400 focus:outline-none transition-colors ${phoneError ? "border-red-500 focus:border-red-500" : "border-neutral-200 focus:border-emerald-500"}`}
+                    />
+                  </div>
                 </div>
+                {phoneError && <span className="text-xs text-red-500 font-medium px-1">{phoneError}</span>}
 
                 {/* Submit */}
                 <button
@@ -286,8 +260,7 @@ export default function Hero() {
                 </div>
 
                 <span className="text-[11px] sm:text-xs font-semibold text-neutral-500 leading-relaxed">
-                  <span className="text-[#047857] font-bold">50K+</span> Gen Z
-                  dreamers already joined!
+                  <span className="text-[#047857] font-bold">Our Goal:</span> Build a community of 10,000 aviation professionals
                 </span>
               </div>
             </div>
@@ -325,7 +298,7 @@ export default function Hero() {
                       alt="member"
                     />
                   </div>
-                  <span className="text-xs ">50K+ Membe</span>
+                  <span className="text-xs font-bold text-emerald-800">Goal: 10K+ Members</span>
                 </div>
               </div>
             </div>
@@ -372,7 +345,7 @@ export default function Hero() {
                   />
                 </div>
                 <span className="text-xs font-bold text-primary">
-                  50K+ Members
+                  Goal: 10K+ Members
                 </span>
               </div>
             </div>

@@ -12,78 +12,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-const videoPreview = [
-  {
-    id: 1,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569965/Airport_Customer_Service_nguaop.mp4",
-    thumbnail:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/so_0/v1778569965/Airport_Customer_Service_nguaop.jpg",
-    title: "Airport Customer Service",
-    subtitle: "Excellence at every touchpoint",
-    duration: "0:45",
-  },
-  {
-    id: 2,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569963/Pilot_qyovzl.mp4",
-    thumbnail:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/so_0/v1778569963/Pilot_qyovzl.jpg",
-    title: "Pilot Career Path",
-    subtitle: "From student to command pilot",
-    duration: "1:20",
-  },
-  {
-    id: 3,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Aircraft_Maintenance_karf5z.mp4",
-    thumbnail:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/so_0/v1778569960/Aircraft_Maintenance_karf5z.jpg",
-    title: "Aircraft Maintenance",
-    subtitle: "Keeping aircraft airworthy and safe",
-    duration: "2:15",
-  },
-  {
-    id: 4,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Cabin_Crew_fjomxr.mp4",
-    thumbnail:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/so_0/v1778569960/Cabin_Crew_fjomxr.jpg",
-    title: "Cabin Crew Training",
-    subtitle: "Safety and service excellence hello",
-    duration: "1:50",
-  },
-  {
-    id: 5,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569965/Airport_Customer_Service_nguaop.mp4",
-    thumbnail:
-      "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=600",
-    title: "Ground Staff Operations",
-    subtitle: "Ensuring smooth operations on the ground",
-    duration: "0:30",
-  },
-  {
-    id: 6,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569963/Pilot_qyovzl.mp4",
-    thumbnail:
-      "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&q=80&w=600",
-    title: "Air Traffic Control",
-    subtitle: "Guiding flights safely through the skies",
-    duration: "1:10",
-  },
-  {
-    id: 7,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Aircraft_Maintenance_karf5z.mp4",
-    thumbnail:
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=600",
-    title: "Flight Operations Dispatch",
-    subtitle: "Planning and coordinating flight paths",
-    duration: "0:50",
-  },
-];
+import { aviationVideos as videoPreview } from "@/constants/videos";
 
 export default function ExploreRoles() {
   const router = useRouter();
@@ -102,7 +31,7 @@ export default function ExploreRoles() {
             </p>
           </div>
           <Link
-            href="/watch"
+            href="/roles"
             className="inline-flex items-center gap-1.5 px-4.5 py-2.5 border border-neutral-300 hover:border-primary text-neutral-700 hover:text-primary rounded-md font-bold text-sm bg-white transition-all hover:bg-emerald-50/10 cursor-pointer self-start md:self-auto shadow-xs active:scale-98"
           >
             View All Roles <FiChevronRight />
