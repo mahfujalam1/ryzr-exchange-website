@@ -1,18 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
+export const dynamic = 'force-dynamic';
 import {
-  FiArrowLeft,
-  FiShare2,
-  FiDownload,
-  FiPlay,
-  FiPause,
-  FiVolume2,
-  FiVolumeX,
-  FiChevronUp,
-  FiChevronDown,
+  FiArrowLeft, FiShare2, FiDownload, FiPlay, FiPause,
+  FiVolume2, FiVolumeX, FiChevronUp, FiChevronDown,
 } from "react-icons/fi";
 
 interface Video {
@@ -25,55 +19,44 @@ interface Video {
 export const videos: Video[] = [
   {
     id: 1,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569965/Airport_Customer_Service_nguaop.mp4",
+    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569965/Airport_Customer_Service_nguaop.mp4",
     title: "Airport Customer Service",
-    description:
-      "Delivering excellence at every touchpoint — from check-in to boarding, discover what world-class airport service looks like.",
+    description: "Delivering excellence at every touchpoint — from check-in to boarding, discover what world-class airport service looks like.",
   },
   {
     id: 2,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569963/Pilot_qyovzl.mp4",
+    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569963/Pilot_qyovzl.mp4",
     title: "Pilot Career Path",
-    description:
-      "From student pilot to captain — an inside look at the journey, training requirements, and career milestones of becoming a professional pilot.",
+    description: "From student pilot to captain — an inside look at the journey, training requirements, and career milestones of becoming a professional pilot.",
   },
   {
     id: 3,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Aircraft_Maintenance_karf5z.mp4",
+    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Aircraft_Maintenance_karf5z.mp4",
     title: "Aircraft Maintenance",
-    description:
-      "Behind every safe flight is a dedicated maintenance crew. Learn how engineers keep aircraft airworthy and passengers safe.",
+    description: "Behind every safe flight is a dedicated maintenance crew. Learn how engineers keep aircraft airworthy and passengers safe.",
   },
   {
     id: 4,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Cabin_Crew_fjomxr.mp4",
+    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Cabin_Crew_fjomxr.mp4",
     title: "Cabin Crew Training",
-    description:
-      "Safety, service, and grace under pressure — explore the rigorous training that shapes exceptional cabin crew members.",
+    description: "Safety, service, and grace under pressure — explore the rigorous training that shapes exceptional cabin crew members.",
   },
   {
     id: 5,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Air_Traffic_Control_gh48nf.mp4",
+    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Air_Traffic_Control_gh48nf.mp4",
     title: "Air Traffic Control",
-    description:
-      "The invisible guardians of the sky — discover how air traffic controllers manage thousands of flights every day with precision.",
+    description: "The invisible guardians of the sky — discover how air traffic controllers manage thousands of flights every day with precision.",
   },
   {
     id: 6,
-    videoUrl:
-      "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569959/Ground_Operations_okkc1q.mp4",
+    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569959/Ground_Operations_okkc1q.mp4",
     title: "Ground Operations",
-    description:
-      "The unsung heroes of aviation — an in-depth look at the ground operations teams that keep airports running smoothly.",
+    description: "The unsung heroes of aviation — an in-depth look at the ground operations teams that keep airports running smoothly.",
   },
 ];
 
-export default function WatchPage() {
+// ✅ Inner component — useSearchParams() এখানে থাকবে
+function WatchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const v = searchParams.get("v");
@@ -103,12 +86,10 @@ export default function WatchPage() {
         }
       }
     };
-
     const container = containerRef.current;
     if (container) {
       container.addEventListener("wheel", handleWheel, { passive: false });
     }
-
     return () => {
       if (container) {
         container.removeEventListener("wheel", handleWheel);
@@ -116,13 +97,11 @@ export default function WatchPage() {
     };
   }, [currentIndex]);
 
-  // Reset play state when video changes
   useEffect(() => {
     setIsPlaying(true);
     setShowPlayIcon(false);
   }, [currentIndex]);
 
-  // Sync URL with the current video ID only when it differs from the existing query parameter
   useEffect(() => {
     const id = videos[currentIndex].id;
     if (typeof window !== "undefined") {
@@ -133,6 +112,7 @@ export default function WatchPage() {
       }
     }
   }, [currentIndex]);
+
   const togglePlayPause = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -146,6 +126,7 @@ export default function WatchPage() {
     setShowPlayIcon(true);
     setTimeout(() => setShowPlayIcon(false), 800);
   };
+
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.touches[0].clientY);
   };
@@ -153,7 +134,6 @@ export default function WatchPage() {
   const handleTouchEnd = (e: React.TouchEvent) => {
     const touchEnd = e.changedTouches[0].clientY;
     const diff = touchStart - touchEnd;
-
     if (Math.abs(diff) > 50) {
       if (diff > 0 && currentIndex < videos.length - 1) {
         setCurrentIndex((prev) => prev + 1);
@@ -226,7 +206,6 @@ export default function WatchPage() {
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="absolute inset-0"
           >
-            {/* Video */}
             <div className="relative w-full h-full" onClick={togglePlayPause}>
               <video
                 ref={videoRef}
@@ -242,7 +221,6 @@ export default function WatchPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
 
-              {/* Play/Pause Indicator (shows briefly on tap) */}
               <AnimatePresence>
                 {showPlayIcon && (
                   <motion.div
@@ -265,7 +243,6 @@ export default function WatchPage() {
 
               {/* Video Info */}
               <div className="absolute bottom-0 left-0 right-0 p-6 space-y-4 pr-24">
-                {/* Title & Description */}
                 <div>
                   <h3 className="text-white text-lg mb-2 font-bold leading-tight drop-shadow-md">
                     {videos[currentIndex].title}
@@ -275,25 +252,22 @@ export default function WatchPage() {
                   </p>
                   <div className="text-white/60 text-xs">
                     Added by{" "}
-                    <span className="text-[#16a34a] font-bold">
-                      Ryzr Exchange
-                    </span>
+                    <span className="text-[#16a34a] font-bold">Ryzr Exchange</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="absolute right-4 bottom-24 flex flex-col gap-5 z-20">
-                {/* Mute/Unmute */}
                 <motion.button
                   whileTap={{ scale: 0.9 }}
                   className="flex flex-col items-center gap-1.5 drop-shadow-lg cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
-                    const v = videoRef.current;
-                    if (v) {
-                      v.muted = !v.muted;
-                      setIsMuted(v.muted);
+                    const vid = videoRef.current;
+                    if (vid) {
+                      vid.muted = !vid.muted;
+                      setIsMuted(vid.muted);
                     }
                   }}
                 >
@@ -317,9 +291,7 @@ export default function WatchPage() {
                   <div className="w-12 h-12 bg-black/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center hover:bg-[#16a34a] hover:border-[#16a34a] transition-all group">
                     <FiShare2 className="text-white group-hover:text-white text-xl" />
                   </div>
-                  <span className="text-white text-[10px] font-bold drop-shadow-md">
-                    Share
-                  </span>
+                  <span className="text-white text-[10px] font-bold drop-shadow-md">Share</span>
                 </motion.button>
 
                 <motion.button
@@ -330,24 +302,19 @@ export default function WatchPage() {
                   <div className="w-12 h-12 bg-black/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center hover:bg-[#16a34a] hover:border-[#16a34a] transition-all group">
                     <FiDownload className="text-white group-hover:text-white text-xl" />
                   </div>
-                  <span className="text-white text-[10px] font-bold drop-shadow-md">
-                    Save
-                  </span>
+                  <span className="text-white text-[10px] font-bold drop-shadow-md">Save</span>
                 </motion.button>
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Up & Down Swipe Navigation Buttons */}
+        {/* Up & Down Navigation Buttons */}
         <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-30">
-          {/* Swipe Up (Previous Video) */}
           <button
             onClick={(e) => {
               e.stopPropagation();
-              if (currentIndex > 0) {
-                setCurrentIndex((prev) => prev - 1);
-              }
+              if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
             }}
             disabled={currentIndex === 0}
             className={`w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all hover:bg-black/60 active:scale-90 ${currentIndex === 0 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
@@ -357,13 +324,10 @@ export default function WatchPage() {
             <FiChevronUp className="text-2xl" />
           </button>
 
-          {/* Swipe Down (Next Video) */}
           <button
             onClick={(e) => {
               e.stopPropagation();
-              if (currentIndex < videos.length - 1) {
-                setCurrentIndex((prev) => prev + 1);
-              }
+              if (currentIndex < videos.length - 1) setCurrentIndex((prev) => prev + 1);
             }}
             disabled={currentIndex === videos.length - 1}
             className={`w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all hover:bg-black/60 active:scale-90 ${currentIndex === videos.length - 1 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
@@ -383,22 +347,21 @@ export default function WatchPage() {
             className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/80 text-xs flex flex-col items-center gap-1 z-10 pointer-events-none"
           >
             <span className="drop-shadow-md">Swipe up or use arrows</span>
-            <svg
-              className="w-5 h-5 drop-shadow-md"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 15l7-7 7 7"
-              />
+            <svg className="w-5 h-5 drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
             </svg>
           </motion.div>
         )}
       </div>
     </div>
+  );
+}
+
+// ✅ Page component — শুধু Suspense wrapper
+export default function WatchPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-neutral-900 flex items-center justify-center text-white">Loading...</div>}>
+      <WatchContent />
+    </Suspense>
   );
 }
