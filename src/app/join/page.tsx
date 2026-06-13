@@ -11,6 +11,7 @@ import {
   FiUserCheck,
   FiArrowLeft,
 } from "react-icons/fi";
+import { submitJoinRequest } from "@/actions";
 
 function JoinPageContent() {
   const router = useRouter();
@@ -24,6 +25,8 @@ function JoinPageContent() {
   const [birthYear, setBirthYear] = useState("");
   const [agree, setAgree] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   // Pre-fill fields if Google provider is passed, or pre-fill phone if passed from home page
   useEffect(() => {
@@ -42,12 +45,39 @@ function JoinPageContent() {
     }
   }, [searchParams]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agree) return;
+    if (!agree || isSubmitting) return;
 
-    // Simulate API registration request
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const data = {
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        email: email,
+        birth_year: parseInt(birthYear),
+        agreed_to_terms: agree,
+        via_google: false,
+        google_id: null,
+        google_email: null
+      };
+      const response = await submitJoinRequest(data);
+
+      // Check for success status (201 Created)
+      if (response.status === 201) {
+        setIsSubmitted(true);
+      } else {
+        setSubmitError("Registration failed. Please try again.");
+      }
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.detail || "An error occurred. Please try again later.";
+      setSubmitError(errorMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Generate birth years from current - 15 back to current - 60
@@ -251,17 +281,23 @@ function JoinPageContent() {
                   </label>
                 </div>
 
+                {submitError && (
+                  <p className="text-red-500 text-xs font-bold text-center mt-2">
+                    {submitError}
+                  </p>
+                )}
+
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={!agree}
+                  disabled={!agree || isSubmitting}
                   className={`w-full mt-4 py-3.5 bg-primary text-white text-sm font-black rounded-lg transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer select-none ${
-                    agree
+                    agree && !isSubmitting
                       ? "hover:bg-primary-hover active:scale-99"
                       : "opacity-50 cursor-not-allowed"
                   }`}
                 >
-                  Join Now - It's Free ⚡
+                  {isSubmitting ? "Joining..." : "Join Now - It's Free ⚡"}
                 </button>
               </form>
             </div>

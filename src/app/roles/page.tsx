@@ -4,11 +4,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FiChevronLeft, FiPlay, FiChevronRight } from "react-icons/fi";
 import Header from "@/components/Header";
-import { aviationVideos as videoPreview } from "@/constants/videos";
+import { fetchVideos } from "@/actions";
+import { useState, useEffect } from "react";
+
+const API_BASE_URL = "http://10.10.20.11:8001";
+const getFullUrl = (url: string) => url.startsWith('/') ? `${API_BASE_URL}${url}` : url;
 
 
 export default function RolesPage() {
   const router = useRouter();
+  const [videos, setVideos] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchVideos().then(setVideos);
+  }, []);
 
   return (
     <main className="min-h-screen bg-neutral-50 flex flex-col">
@@ -33,12 +42,12 @@ export default function RolesPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {videoPreview.map((video) => (
+            {videos.map((video) => (
               <div key={video.id} className="bg-white rounded-2xl overflow-hidden border border-neutral-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group h-full">
                 {/* Aspect Ratio 30s Video Card */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-100">
                   <img
-                    src={video.thumbnail}
+                    src={getFullUrl(video.thumbnail_url)}
                     alt={video.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -54,7 +63,7 @@ export default function RolesPage() {
 
                   {/* Time Tag */}
                   <span className="absolute bottom-2.5 right-2.5 px-2 py-0.5 bg-black/60 rounded text-[10px] font-bold tracking-wider text-white uppercase backdrop-blur-xs">
-                    {video.duration}
+                    {video.duration || "30s"}
                   </span>
                 </div>
 
@@ -64,7 +73,7 @@ export default function RolesPage() {
                     {video.title}
                   </h3>
                   <p className="text-sm text-neutral-500 font-medium leading-relaxed mt-2 flex-grow line-clamp-2">
-                    {video.subtitle}
+                    {video.short_description}
                   </p>
 
                   {/* Watch Button */}

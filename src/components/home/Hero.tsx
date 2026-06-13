@@ -9,12 +9,14 @@ import {
 } from "@/constants/countries";
 import { FcGoogle } from "react-icons/fc";
 import { isValidPhoneNumber, type CountryCode } from "libphonenumber-js";
+import { verifyPhoneNumber } from "@/actions";
 
 export default function Hero() {
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [countryCode, setCountryCode] = useState("+1");
   const [phoneError, setPhoneError] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const defaultCountry =
     countriesList.find((c) => c.label === "CA") || countriesList[0];
@@ -40,14 +42,29 @@ export default function Hero() {
     setPhoneNumber(e.target.value);
   };
 
-  const handleHeroSubmit = (e: React.FormEvent) => {
+  const handleHeroSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phoneNumber || phoneError) return;
+    if (!phoneNumber || phoneError || isVerifying) return;
 
-    // Route to join page with phone pre-filled
-    router.push(
-      `/join?phone=${encodeURIComponent(countryCode + " " + phoneNumber)}`,
-    );
+    setIsVerifying(true);
+    try {
+      const fullPhone = countryCode + " " + phoneNumber;
+      const response = await verifyPhoneNumber(fullPhone);
+
+      if (response.valid) {
+        // Route to join page with phone pre-filled
+        router.push(
+          `/join?phone=${encodeURIComponent(fullPhone)}`,
+        );
+      } else {
+        setPhoneError("Phone number verification failed.");
+      }
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.detail || "Something went wrong. Please try again.";
+      setPhoneError(errorMsg);
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const filteredCountries = countriesList.filter(
@@ -228,10 +245,11 @@ export default function Hero() {
                 {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full cursor-pointer py-3 sm:py-3.5 bg-[#047857] hover:bg-[#035a41] text-white text-sm font-bold rounded-lg transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-1.5 uppercase tracking-wider"
+                  disabled={isVerifying}
+                  className={`w-full cursor-pointer py-3 sm:py-3.5 bg-[#047857] hover:bg-[#035a41] text-white text-sm font-bold rounded-lg transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-1.5 uppercase tracking-wider ${isVerifying ? "opacity-70 cursor-not-allowed" : ""}`}
                 >
-                  Join the Community
-                  <FiZap className="text-base text-white fill-current" />
+                  {isVerifying ? "Verifying..." : "Join the Community"}
+                  {!isVerifying && <FiZap className="text-base text-white fill-current" />}
                 </button>
               </form>
 

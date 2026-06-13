@@ -12,10 +12,20 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-import { aviationVideos as videoPreview } from "@/constants/videos";
+import { fetchVideos } from "@/actions";
+import { useState, useEffect } from "react";
+
+const API_BASE_URL = "http://10.10.20.11:8001";
+
+const getFullUrl = (url: string) => url.startsWith('/') ? `${API_BASE_URL}${url}` : url;
 
 export default function ExploreRoles() {
   const router = useRouter();
+  const [videos, setVideos] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchVideos().then(setVideos);
+  }, []);
 
   return (
     <section className="py-8 relative overflow-hidden container mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,13 +68,13 @@ export default function ExploreRoles() {
             }}
             className="w-full !overflow-visible"
           >
-            {videoPreview.map((video) => (
+            {videos.map((video) => (
               <SwiperSlide key={video.id} className="h-auto">
                 <div className="bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group/card h-full">
                   {/* Aspect Ratio 30s Video Card */}
                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-100">
                     <img
-                      src={video.thumbnail}
+                      src={getFullUrl(video.thumbnail_url)}
                       alt={video.title}
                       className="w-full h-full object-cover group-hover/card:scale-104 transition-all duration-500"
                     />
@@ -90,7 +100,7 @@ export default function ExploreRoles() {
                       {video.title}
                     </h3>
                     <p className="text-xs text-neutral-500 font-medium leading-relaxed mt-2 flex-grow">
-                      {video.subtitle}
+                      {video.short_description}
                     </p>
 
                     {/* Watch Button */}

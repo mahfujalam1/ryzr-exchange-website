@@ -9,71 +9,53 @@ import {
   FiVolume2, FiVolumeX, FiChevronUp, FiChevronDown,
 } from "react-icons/fi";
 
+import { fetchVideos } from "@/actions";
+
+const API_BASE_URL = "http://10.10.20.11:8001";
+const getFullUrl = (url: string) => url.startsWith('/') ? `${API_BASE_URL}${url}` : url;
+
 interface Video {
-  id: number;
-  videoUrl: string;
+  id: string;
+  video_url: string;
   title: string;
-  description: string;
+  short_description: string;
+  thumbnail_url: string;
+  career_role: string;
+  views: number;
+  is_saved: boolean;
 }
 
-export const videos: Video[] = [
-  {
-    id: 1,
-    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569965/Airport_Customer_Service_nguaop.mp4",
-    title: "Airport Customer Service",
-    description: "Delivering excellence at every touchpoint — from check-in to boarding, discover what world-class airport service looks like.",
-  },
-  {
-    id: 2,
-    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569963/Pilot_qyovzl.mp4",
-    title: "Pilot Career Path",
-    description: "From student pilot to captain — an inside look at the journey, training requirements, and career milestones of becoming a professional pilot.",
-  },
-  {
-    id: 3,
-    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Aircraft_Maintenance_karf5z.mp4",
-    title: "Aircraft Maintenance",
-    description: "Behind every safe flight is a dedicated maintenance crew. Learn how engineers keep aircraft airworthy and passengers safe.",
-  },
-  {
-    id: 4,
-    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Cabin_Crew_fjomxr.mp4",
-    title: "Cabin Crew Training",
-    description: "Safety, service, and grace under pressure — explore the rigorous training that shapes exceptional cabin crew members.",
-  },
-  {
-    id: 5,
-    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569960/Air_Traffic_Control_gh48nf.mp4",
-    title: "Air Traffic Control",
-    description: "The invisible guardians of the sky — discover how air traffic controllers manage thousands of flights every day with precision.",
-  },
-  {
-    id: 6,
-    videoUrl: "https://res.cloudinary.com/dhsuyds5x/video/upload/v1778569959/Ground_Operations_okkc1q.mp4",
-    title: "Ground Operations",
-    description: "The unsung heroes of aviation — an in-depth look at the ground operations teams that keep airports running smoothly.",
-  },
-];
-
-// ✅ Inner component — useSearchParams() এখানে থাকবে
 function WatchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const v = searchParams.get("v");
-  const [currentIndex, setCurrentIndex] = useState<number>(() => {
-    if (v) {
-      const id = parseInt(v, 10);
-      const index = videos.findIndex((video) => video.id === id);
-      if (index !== -1) return index;
+
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchVideos().then((data) => {
+      setVideos(data);
+      setIsLoading(false);
+    });
+  }, []);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (videos.length > 0 && v) {
+      const index = videos.findIndex((video) => video.id === v);
+      if (index !== -1) {
+        setCurrentIndex(index);
+      }
     }
-    return 0;
-  });
+  }, [videos, v]);
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [touchStart, setTouchStart] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [showPlayIcon, setShowPlayIcon] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isBuffering, setIsBuffering] = useState<boolean>(true);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -100,18 +82,19 @@ function WatchContent() {
   useEffect(() => {
     setIsPlaying(true);
     setShowPlayIcon(false);
+    setIsBuffering(true);
   }, [currentIndex]);
 
   useEffect(() => {
-    const id = videos[currentIndex].id;
-    if (typeof window !== "undefined") {
+    if (videos.length > 0 && typeof window !== "undefined") {
+      const id = videos[currentIndex].id;
       const params = new URLSearchParams(window.location.search);
       const currentParam = params.get('v');
-      if (currentParam !== id.toString()) {
+      if (currentParam !== id) {
         router.replace(`/watch?v=${id}`);
       }
     }
-  }, [currentIndex]);
+  }, [currentIndex, videos]);
 
   const togglePlayPause = () => {
     const video = videoRef.current;
@@ -145,18 +128,19 @@ function WatchContent() {
 
   const handleShare = async () => {
     const currentVideo = videos[currentIndex];
+
     if (navigator.share) {
       try {
         await navigator.share({
           title: currentVideo.title,
-          text: currentVideo.description,
-          url: currentVideo.videoUrl,
+          text: currentVideo.short_description,
+          url: window.location.href,
         });
       } catch (err) {
         console.error("Error sharing:", err);
       }
     } else {
-      navigator.clipboard.writeText(currentVideo.videoUrl);
+      navigator.clipboard.writeText(window.location.href);
       alert("Video link copied to clipboard!");
     }
   };
@@ -164,9 +148,10 @@ function WatchContent() {
   const handleDownload = async () => {
     try {
       const currentVideo = videos[currentIndex];
+
       const a = document.createElement("a");
       a.style.display = "none";
-      a.href = currentVideo.videoUrl;
+      a.href = getFullUrl(currentVideo.video_url);
       a.download = `${currentVideo.title.replace(/\s+/g, "_")}.mp4`;
       a.target = "_blank";
       document.body.appendChild(a);
@@ -174,9 +159,17 @@ function WatchContent() {
       document.body.removeChild(a);
     } catch (err) {
       console.error("Download failed", err);
-      alert("Failed to download video.");
+      alert("Failed to save/download video.");
     }
   };
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-neutral-900 flex items-center justify-center text-white">Loading...</div>;
+  }
+
+  if (videos.length === 0) {
+    return <div className="min-h-screen bg-neutral-900 flex items-center justify-center text-white">No videos found.</div>;
+  }
 
   return (
     <div className="min-h-screen bg-neutral-900 sm:flex sm:items-center sm:justify-center">
@@ -209,8 +202,8 @@ function WatchContent() {
             <div className="relative w-full h-full" onClick={togglePlayPause}>
               <video
                 ref={videoRef}
-                key={videos[currentIndex].videoUrl}
-                src={videos[currentIndex].videoUrl}
+                key={videos[currentIndex].id}
+                src={getFullUrl(videos[currentIndex].video_url)}
                 className="w-full h-full object-cover cursor-pointer"
                 autoPlay
                 loop
@@ -218,8 +211,42 @@ function WatchContent() {
                 playsInline
                 controls={false}
                 preload="auto"
+                onWaiting={() => setIsBuffering(true)}
+                onPlaying={() => setIsBuffering(false)}
+                onCanPlay={() => setIsBuffering(false)}
+                onLoadedData={() => setIsBuffering(false)}
               />
+              {/* Preload Previous and Next Videos in the background */}
+              {currentIndex > 0 && (
+                <video
+                  src={getFullUrl(videos[currentIndex - 1].video_url)}
+                  preload="auto"
+                  className="hidden"
+                  muted
+                />
+              )}
+              {currentIndex < videos.length - 1 && (
+                <video
+                  src={getFullUrl(videos[currentIndex + 1].video_url)}
+                  preload="auto"
+                  className="hidden"
+                  muted
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
+
+              <AnimatePresence>
+                {isBuffering && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+                  >
+                    <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <AnimatePresence>
                 {showPlayIcon && (
@@ -248,7 +275,7 @@ function WatchContent() {
                     {videos[currentIndex].title}
                   </h3>
                   <p className="text-white/80 text-sm mb-3 drop-shadow-md line-clamp-3 leading-relaxed">
-                    {videos[currentIndex].description}
+                    {videos[currentIndex].short_description}
                   </p>
                   <div className="text-white/60 text-xs">
                     Added by{" "}
