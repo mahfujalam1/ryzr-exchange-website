@@ -11,7 +11,7 @@ import {
 
 import { fetchVideos } from "@/actions";
 
-const API_BASE_URL = "http://10.10.20.11:8001";
+const API_BASE_URL = "https://ryzr-exchange.up.railway.app";
 const getFullUrl = (url: string) => url.startsWith('/') ? `${API_BASE_URL}${url}` : url;
 
 interface Video {
