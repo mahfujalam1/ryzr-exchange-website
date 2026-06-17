@@ -32,6 +32,8 @@ function WatchContent() {
 
   const [videos, setVideos] = useState<Video[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const isInitialized = useRef<boolean>(false);
 
   useEffect(() => {
     fetchVideos().then((data) => {
@@ -39,14 +41,18 @@ function WatchContent() {
       setIsLoading(false);
     });
   }, []);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
+  // Once videos are loaded, find the correct index from URL param
   useEffect(() => {
-    if (videos.length > 0 && v) {
-      const index = videos.findIndex((video) => video.id === v);
-      if (index !== -1) {
-        setCurrentIndex(index);
+    if (videos.length > 0 && !isInitialized.current) {
+      if (v) {
+        const index = videos.findIndex((video) => video.id === v);
+        if (index !== -1) {
+          setCurrentIndex(index);
+        }
       }
+      // Mark as initialized so URL-sync effect can now run
+      isInitialized.current = true;
     }
   }, [videos, v]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,6 +62,11 @@ function WatchContent() {
   const [showPlayIcon, setShowPlayIcon] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [isBuffering, setIsBuffering] = useState<boolean>(true);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(1);
+  const [showVolumeSlider, setShowVolumeSlider] = useState<boolean>(false);
+  const volumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -83,10 +94,72 @@ function WatchContent() {
     setIsPlaying(true);
     setShowPlayIcon(false);
     setIsBuffering(true);
+    setCurrentTime(0);
+    setDuration(0);
   }, [currentIndex]);
 
+  const handleTimeUpdate = () => {
+    const video = videoRef.current;
+    if (video) {
+      setCurrentTime(video.currentTime);
+      setDuration(video.duration || 0);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    const video = videoRef.current;
+    if (video) {
+      setDuration(video.duration || 0);
+    }
+  };
+
+  const handleProgressSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    if (video && duration > 0) {
+      const newTime = (parseFloat(e.target.value) / 100) * duration;
+      video.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const video = videoRef.current;
+    const newVolume = parseFloat(e.target.value);
+    if (video) {
+      video.volume = newVolume;
+      video.muted = newVolume === 0;
+      setVolume(newVolume);
+      setIsMuted(newVolume === 0);
+    }
+    if (volumeTimerRef.current) clearTimeout(volumeTimerRef.current);
+    volumeTimerRef.current = setTimeout(() => setShowVolumeSlider(false), 3000);
+  };
+
+  const handleMuteToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const vid = videoRef.current;
+    if (!vid) return;
+    const nowMuted = !vid.muted;
+    vid.muted = nowMuted;
+    if (!nowMuted && vid.volume === 0) {
+      vid.volume = 1;
+      setVolume(1);
+    }
+    setIsMuted(nowMuted);
+    setShowVolumeSlider(true);
+    if (volumeTimerRef.current) clearTimeout(volumeTimerRef.current);
+    volumeTimerRef.current = setTimeout(() => setShowVolumeSlider(false), 3000);
+  };
+
+  const formatTime = (sec: number) => {
+    if (!sec || isNaN(sec)) return "0:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+
   useEffect(() => {
-    if (videos.length > 0 && typeof window !== "undefined") {
+    if (videos.length > 0 && typeof window !== "undefined" && isInitialized.current) {
       const id = videos[currentIndex].id;
       const params = new URLSearchParams(window.location.search);
       const currentParam = params.get('v');
@@ -95,6 +168,7 @@ function WatchContent() {
       }
     }
   }, [currentIndex, videos]);
+
 
   const togglePlayPause = () => {
     const video = videoRef.current;
@@ -215,6 +289,8 @@ function WatchContent() {
                 onPlaying={() => setIsBuffering(false)}
                 onCanPlay={() => setIsBuffering(false)}
                 onLoadedData={() => setIsBuffering(false)}
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
               />
               {/* Preload Previous and Next Videos in the background */}
               {currentIndex > 0 && (
@@ -269,46 +345,121 @@ function WatchContent() {
               </AnimatePresence>
 
               {/* Video Info */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 space-y-4 pr-24">
-                <div>
+              <div className="absolute bottom-0 left-0 right-0 space-y-3 pr-20">
+                <div className="px-4">
                   <h3 className="text-white text-lg mb-2 font-bold leading-tight drop-shadow-md">
                     {videos[currentIndex].title}
                   </h3>
-                  <p className="text-white/80 text-sm mb-3 drop-shadow-md line-clamp-3 leading-relaxed">
+                  <p className="text-white/80 text-sm mb-2 drop-shadow-md line-clamp-3 leading-relaxed">
                     {videos[currentIndex].short_description}
                   </p>
-                  <div className="text-white/60 text-xs">
+                  <div className="text-white/60 text-xs mb-3">
                     Added by{" "}
                     <span className="text-[#16a34a] font-bold">Ryzr Exchange</span>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div
+                  className="px-4 pb-5"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-white/70 text-[10px] font-mono tabular-nums">{formatTime(currentTime)}</span>
+                    <div className="relative flex-1 h-1 group">
+                      <div className="absolute inset-0 rounded-full bg-white/20" />
+                      <div
+                        className="absolute top-0 left-0 h-full rounded-full bg-[#16a34a] transition-all"
+                        style={{ width: duration > 0 ? `${(currentTime / duration) * 100}%` : "0%" }}
+                      />
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        step={0.1}
+                        value={duration > 0 ? (currentTime / duration) * 100 : 0}
+                        onChange={handleProgressSeek}
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute inset-0 w-full opacity-0 cursor-pointer h-full"
+                        style={{ margin: 0, padding: 0 }}
+                      />
+                      <div
+                        className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md transition-all pointer-events-none"
+                        style={{ left: duration > 0 ? `calc(${(currentTime / duration) * 100}% - 6px)` : "-6px" }}
+                      />
+                    </div>
+                    <span className="text-white/70 text-[10px] font-mono tabular-nums">{formatTime(duration)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="absolute right-4 bottom-24 flex flex-col gap-5 z-20">
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  className="flex flex-col items-center gap-1.5 drop-shadow-lg cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    const vid = videoRef.current;
-                    if (vid) {
-                      vid.muted = !vid.muted;
-                      setIsMuted(vid.muted);
-                    }
-                  }}
+                {/* Mute button with vertical volume slider above on hover */}
+                <div
+                  className="relative flex flex-col items-center"
+                  onMouseEnter={() => setShowVolumeSlider(true)}
+                  onMouseLeave={() => setShowVolumeSlider(false)}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="w-12 h-12 bg-black/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/50 transition-all group">
-                    {isMuted ? (
-                      <FiVolumeX className="text-white text-xl" />
-                    ) : (
-                      <FiVolume2 className="text-white text-xl" />
+                  {/* Vertical Volume Slider — appears above the button */}
+                  <AnimatePresence>
+                    {showVolumeSlider && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="absolute bottom-full mb-3 flex flex-col items-center gap-1.5 bg-black/70 backdrop-blur-md border border-white/20 rounded-2xl px-3 py-3"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FiVolume2 className="text-white/70 text-sm flex-shrink-0" />
+                        <div className="relative flex items-center justify-center" style={{ height: 80, width: 20 }}>
+                          <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.02}
+                            value={isMuted ? 0 : volume}
+                            onChange={handleVolumeChange}
+                            onClick={(e) => e.stopPropagation()}
+                            className="cursor-pointer accent-[#16a34a]"
+                            style={{
+                              writingMode: "vertical-lr",
+                              direction: "rtl",
+                              width: 4,
+                              height: 80,
+                              // appearance: "slider-vertical",
+                              WebkitAppearance: "slider-vertical",
+                              background: `linear-gradient(to top, #16a34a ${(isMuted ? 0 : volume) * 100}%, rgba(255,255,255,0.2) ${(isMuted ? 0 : volume) * 100}%)`,
+                              borderRadius: 4,
+                              outline: "none",
+                              border: "none",
+                            }}
+                          />
+                        </div>
+                        <FiVolumeX className="text-white/70 text-sm flex-shrink-0" />
+                      </motion.div>
                     )}
-                  </div>
-                  <span className="text-white text-[10px] font-bold drop-shadow-md">
-                    {isMuted ? "Unmute" : "Mute"}
-                  </span>
-                </motion.button>
+                  </AnimatePresence>
+
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    className="flex flex-col items-center gap-1.5 drop-shadow-lg cursor-pointer"
+                    onClick={handleMuteToggle}
+                  >
+                    <div className="w-12 h-12 bg-black/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center hover:bg-white/20 hover:border-white/50 transition-all">
+                      {isMuted ? (
+                        <FiVolumeX className="text-white text-xl" />
+                      ) : (
+                        <FiVolume2 className="text-white text-xl" />
+                      )}
+                    </div>
+                    <span className="text-white text-[10px] font-bold drop-shadow-md">
+                      {isMuted ? "Unmute" : "Mute"}
+                    </span>
+                  </motion.button>
+                </div>
 
                 <motion.button
                   whileTap={{ scale: 0.9 }}
