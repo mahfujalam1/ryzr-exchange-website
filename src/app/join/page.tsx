@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import {
   FiCheck,
   FiCalendar,
@@ -12,6 +11,7 @@ import {
   FiArrowLeft,
 } from "react-icons/fi";
 import { submitJoinRequest } from "@/actions";
+import Footer from "@/components/Footer";
 
 function JoinPageContent() {
   const router = useRouter();
@@ -143,19 +143,10 @@ function JoinPageContent() {
           <div className="lg:col-span-6 flex justify-center w-full max-w-lg mx-auto lg:max-w-none relative">
             <div className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-[5/4] shrink-0">
               {/* Primary Image: Flight Crew in airport terminal */}
-              <div className="w-[85%] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-4 border-white absolute left-0 top-0 z-10 hover:z-20 transition-all">
+              <div className="w-[85%] rounded-3xl overflow-hidden  absolute left-0 top-0 z-10 hover:z-20 transition-all">
                 <img
-                  src="/join1.png"
+                  src="/join.png"
                   alt="Aviation crew members standing"
-                  className="w-full h-full object-cover scale-102 hover:scale-105 transition-all duration-500"
-                />
-              </div>
-
-              {/* Inset Image: Crew briefing round-table */}
-              <div className="w-[45%] aspect-square rounded-2xl overflow-hidden shadow-2xl border-4 border-white absolute right-0 bottom-4 z-20 hover:scale-102 transition-transform duration-300">
-                <img
-                  src="/join2.png"
-                  alt="Flight crew briefing"
                   className="w-full h-full object-cover"
                 />
               </div>
