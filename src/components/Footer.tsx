@@ -52,7 +52,7 @@ export default function Footer() {
             </span>
             <div className="flex items-center gap-4">
               <a
-                href="https://tiktok.com"
+                href="https://www.tiktok.com/@ryzer.ex?_r=1&_t=ZS-97JYRw8ZDKX"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xl text-[#16a34a] hover:text-emerald-700 transition-all hover:scale-110 active:scale-95"
@@ -79,7 +79,7 @@ export default function Footer() {
                 <FaYoutube />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/ryzr-exchange"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xl text-[#16a34a] hover:text-emerald-700 transition-all hover:scale-110 active:scale-95"
@@ -89,7 +89,6 @@ export default function Footer() {
               </a>
             </div>
           </div>
-
         </div>
       </div>
     </footer>

@@ -35,7 +35,7 @@ const leaders = [
 
 export default function TrustedLeaders() {
   return (
-    <section className="py-10 overflow-hidden relative">
+    <section className="overflow-hidden relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Left-aligned header */}
         <p className="text-lg font-bold text-gray-800 tracking-widest uppercase mb-8">

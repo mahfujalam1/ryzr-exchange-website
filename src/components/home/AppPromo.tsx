@@ -62,6 +62,14 @@ export default function AppPromo() {
                   Receive real-time job updates
                 </span>
               </div>
+              <div className="flex gap-2.5 items-start">
+                <div className="w-5 h-5 rounded-full bg-[#16a34a] text-white flex items-center justify-center shrink-0 mt-0.5">
+                  <FiCheck className="text-[11px] font-bold" />
+                </div>
+                <span className="text-xs sm:text-[14px] font-bold text-neutral-700">
+                  App Launching in Q4
+                </span>
+              </div>
             </div>
 
             {/* App Download Buttons */}
