@@ -61,24 +61,6 @@ export default function Footer() {
                                 <FaTiktok />
                             </a>
                             <a
-                                href="https://instagram.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xl text-[#16a34a] hover:text-emerald-700 transition-all hover:scale-110 active:scale-95"
-                                aria-label="Instagram"
-                            >
-                                <FaInstagram />
-                            </a>
-                            <a
-                                href="https://youtube.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xl text-[#16a34a] hover:text-emerald-700 transition-all hover:scale-110 active:scale-95"
-                                aria-label="YouTube"
-                            >
-                                <FaYoutube />
-                            </a>
-                            <a
                                 href="https://www.linkedin.com/company/ryzr-exchange"
                                 target="_blank"
                                 rel="noopener noreferrer"
