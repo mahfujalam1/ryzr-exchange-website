@@ -42,7 +42,7 @@ export default function RolesPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {videos.map((video) => (
+            {videos.slice(0, 4).map((video) => (
               <div key={video.id} className="bg-white rounded-2xl overflow-hidden border border-neutral-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group h-full">
                 {/* Aspect Ratio 30s Video Card */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-100">
