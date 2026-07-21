@@ -15,7 +15,7 @@ import "swiper/css/navigation";
 import { fetchVideos } from "@/actions";
 import { useState, useEffect } from "react";
 
-const API_BASE_URL = "https://ryzr-exchange.up.railway.app";
+const API_BASE_URL = "https://web-production-6b4fb.up.railway.app";
 
 const getFullUrl = (url: string) => url.startsWith('/') ? `${API_BASE_URL}${url}` : url;
 
