@@ -23,10 +23,24 @@ const actions = {
 
   submitJoinRequest: async (data: any) => {
     try {
-      const response = await api.post("/join-requests", data);
+      // Keep the trailing slash so the backend does not redirect this request
+      // to an incorrectly generated http:// URL behind Railway's proxy.
+      const response = await api.post("/join-requests/", data);
       return response;
     } catch (error) {
       console.error("Error submitting join request:", error);
+      throw error;
+    }
+  },
+
+  googlePrefill: async (idToken: string) => {
+    try {
+      const response = await api.post("/join-requests/google-prefill", {
+        id_token: idToken,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
       throw error;
     }
   },
@@ -64,5 +78,5 @@ const actions = {
   }
 };
 
-export const { verifyPhoneNumber, submitJoinRequest, fetchVideos, saveVideo, shareVideo } = actions;
+export const { verifyPhoneNumber, submitJoinRequest, googlePrefill, fetchVideos, saveVideo, shareVideo } = actions;
 

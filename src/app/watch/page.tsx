@@ -60,7 +60,7 @@ function WatchContent() {
   const [touchStart, setTouchStart] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [showPlayIcon, setShowPlayIcon] = useState<boolean>(false);
-  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isBuffering, setIsBuffering] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
@@ -281,7 +281,7 @@ function WatchContent() {
                 className="w-full h-full object-cover cursor-pointer"
                 autoPlay
                 loop
-                muted
+                muted={isMuted}
                 playsInline
                 controls={false}
                 preload="auto"

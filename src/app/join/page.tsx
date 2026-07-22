@@ -27,6 +27,9 @@ function JoinPageContent() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [viaGoogle, setViaGoogle] = useState(false);
+  const [googleId, setGoogleId] = useState<string | null>(null);
+  const [googleEmail, setGoogleEmail] = useState<string | null>(null);
 
   // Pre-fill fields if Google provider is passed, or pre-fill phone if passed from home page
   useEffect(() => {
@@ -34,12 +37,40 @@ function JoinPageContent() {
     const providerParam = searchParams.get("provider");
 
     if (providerParam === "google") {
-      setFirstName("Mahfuj");
-      setLastName("Alam");
-      setPhone("+91 98765 43210");
-      setEmail("mahfuj.alam@gmail.com");
-      setBirthYear("2002");
-      setAgree(true);
+      const storedPrefill = sessionStorage.getItem("googleJoinPrefill");
+
+      if (!storedPrefill) {
+        setSubmitError("Please sign in with Google from the home page first.");
+        return;
+      }
+
+      try {
+        const prefill = JSON.parse(storedPrefill);
+        const fullName = String(prefill.name ?? prefill.full_name ?? "").trim();
+        const nameParts = fullName.split(/\s+/).filter(Boolean);
+
+        setFirstName(prefill.first_name ?? prefill.firstName ?? nameParts[0] ?? "");
+        setLastName(
+          prefill.last_name ?? prefill.lastName ?? nameParts.slice(1).join(" "),
+        );
+        setEmail(prefill.email ?? prefill.google_email ?? "");
+        setPhone(
+          prefill.phone ??
+            prefill.phone_number ??
+            prefill.mobile_phone_number ??
+            "",
+        );
+        const googleBirthValue =
+          prefill.birth_year ?? prefill.birthYear ?? prefill.birthday ?? "";
+        const googleBirthYear = String(googleBirthValue).match(/\d{4}/)?.[0] ?? "";
+        setBirthYear(googleBirthYear);
+        setGoogleEmail(prefill.google_email ?? prefill.email ?? null);
+        setGoogleId(prefill.google_id ?? prefill.sub ?? prefill.id ?? null);
+        setViaGoogle(true);
+      } catch {
+        sessionStorage.removeItem("googleJoinPrefill");
+        setSubmitError("Google profile data could not be loaded. Please sign in again.");
+      }
     } else if (phoneParam) {
       setPhone(decodeURIComponent(phoneParam));
     }
@@ -60,9 +91,9 @@ function JoinPageContent() {
         email: email,
         birth_year: parseInt(birthYear),
         agreed_to_terms: agree,
-        via_google: false,
-        google_id: null,
-        google_email: null
+        via_google: viaGoogle,
+        google_id: googleId,
+        google_email: googleEmail
       };
       const response = await submitJoinRequest(data);
 

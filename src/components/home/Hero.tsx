@@ -7,9 +7,9 @@ import {
   countries as countriesList,
   type Country,
 } from "@/constants/countries";
-import { FcGoogle } from "react-icons/fc";
 import { isValidPhoneNumber, type CountryCode } from "libphonenumber-js";
 import { verifyPhoneNumber } from "@/actions";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 export default function Hero() {
   const router = useRouter();
@@ -263,13 +263,7 @@ export default function Hero() {
               </div>
 
               {/* Google Button */}
-              <button
-                type="button"
-                onClick={() => router.push("/join?provider=google")}
-                className="w-full cursor-pointer py-2.5 border border-neutral-200 rounded-lg hover:bg-neutral-50 flex items-center justify-center transition-all hover:border-neutral-300 shadow-sm"
-              >
-                <FcGoogle className="text-3xl" />
-              </button>
+              <GoogleSignInButton />
 
               {/* Users */}
               <div className="mt-5 pt-4 border-t border-neutral-100 flex flex-col sm:flex-row items-center gap-3 justify-center sm:justify-start text-center sm:text-left">
