@@ -90,7 +90,7 @@ export default function Hero() {
           className="absolute inset-0 hidden lg:block bg-gradient-to-l from-transparent via-transparent to-white"
           style={{
             background:
-              "linear-gradient(to right, white 0%, white 5%, transparent 90%)",
+              "linear-gradient(to right, white 0%, white 5%, transparent 70%)",
           }}
         />
       </div>

@@ -68,7 +68,7 @@ export default function ExploreRoles() {
             }}
             className="w-full !overflow-visible"
           >
-            {videos.slice(0, 4).map((video) => (
+            {videos.map((video) => (
               <SwiperSlide key={video.id} className="h-auto">
                 <div className="bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group/card h-full">
                   {/* Aspect Ratio 30s Video Card */}
