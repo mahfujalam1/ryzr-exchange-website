@@ -81,16 +81,16 @@ export default function Hero() {
         <img
           src="/hero-pilot.jpg"
           alt="Ryzr Exchange Hero Background"
-          className="w-full h-full object-cover object-center lg:object-[center_-65%]"
+          className="w-full h-full object-cover object-[67%_center] lg:object-[center_-65%]"
         />
         {/* White glassmorphic gradient overlay for maximum mobile contrast & premium desktop look */}
-        <div className="absolute inset-0 bg-white/85 sm:hidden" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/50 via-white/25 to-transparent sm:hidden" />
         <div className="absolute inset-0 hidden sm:block lg:hidden bg-white/20" />
         <div
           className="absolute inset-0 hidden lg:block bg-gradient-to-l from-transparent via-transparent to-white"
           style={{
             background:
-              "linear-gradient(to right, white 0%, white 5%, transparent 70%)",
+              "linear-gradient(to right, white 0%, white 5%, transparent 90%)",
           }}
         />
       </div>
@@ -100,12 +100,12 @@ export default function Hero() {
           {/* Left Side: Copy and Quick Registration Form */}
           <div className="lg:col-span-6 flex flex-col items-start gap-5 max-w-xl mx-auto lg:mx-0">
             {/* Top Badge */}
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 border border-emerald-500/25 text-[#047857] rounded-full text-[11px] font-extrabold tracking-wider uppercase">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 border border-emerald-500/25 text-[#047857] rounded-full text-[8px] md:text-[11px] font-extrabold tracking-wider uppercase">
               <span>The future takes off with you</span>
             </div>
 
             {/* Heading */}
-            <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-neutral-900 leading-[1.08] text-left uppercase">
+            <h1 className="text-3xl sm:text-5xl lg:text-[56px] font-bold tracking-tight text-neutral-700 leading-[1.08] text-left uppercase">
               <span className="block">YOUR AVIATION</span>
               <span className="block">CAREER STARTS</span>
               <span
@@ -117,7 +117,7 @@ export default function Hero() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-neutral-500 font-semibold leading-relaxed text-left max-w-md">
+            <p className="text-base sm:text-lg text-neutral-700 font-semibold leading-relaxed text-left max-w-md">
               Real training. Real opportunities. <br />A global community for
               Gen Z dreamers.
             </p>
