@@ -114,7 +114,7 @@ export default function ExploreRoles() {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> 
 
           {/* Navigation Buttons */}
           <button

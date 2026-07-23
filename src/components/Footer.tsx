@@ -27,7 +27,7 @@ export default function Footer() {
                             <span className="text-[13px] text-neutral-600 font-medium">
                                 © 2026 RYZR Exchange. All rights reserved.
                             </span>
-                            <div className="flex items-center text-[13px] text-neutral-400 font-medium">
+                            {/* <div className="flex items-center text-[13px] text-neutral-400 font-medium">
                                 <Link
                                     href="/privacy"
                                     className="hover:text-[#16a34a] transition-colors"
@@ -41,7 +41,7 @@ export default function Footer() {
                                 >
                                     Terms of Use
                                 </Link>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
