@@ -61,8 +61,7 @@ function WatchContent() {
   const [touchStart, setTouchStart] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [showPlayIcon, setShowPlayIcon] = useState<boolean>(false);
-  // Browsers only allow reliable autoplay when media starts muted.
-  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isBuffering, setIsBuffering] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
@@ -107,9 +106,10 @@ function WatchContent() {
     if (!video || !currentVideo) return;
 
     video.autoplay = true;
-    video.defaultMuted = true;
-    video.muted = true;
-    setIsMuted(true);
+    video.defaultMuted = false;
+    video.muted = false;
+    video.volume = volume;
+    setIsMuted(false);
     video.play().catch(() => {
       setIsBuffering(false);
       setIsPlaying(false);
