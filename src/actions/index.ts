@@ -4,9 +4,12 @@ const API_BASE_URL = "https://web-production-6b4fb.up.railway.app/api/v1";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 15000,
 });
 
 let cachedVideos: any[] | null = null;
+const wait = (milliseconds: number) =>
+  new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 const actions = {
   verifyPhoneNumber: async (phoneNumber: string) => {
@@ -47,14 +50,29 @@ const actions = {
 
   fetchVideos: async (): Promise<any[]> => {
     if (cachedVideos) return cachedVideos;
-    try {
-      const response = await api.get("/videos/public");
-      cachedVideos = response.data;
-      return cachedVideos || [];
-    } catch (error) {
-      console.error("Error fetching videos:", error);
-      return [];
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const response = await api.get("/videos/public");
+        cachedVideos = response.data;
+        return cachedVideos || [];
+      } catch (error: any) {
+        const status = error.response?.status;
+        const isTemporaryFailure =
+          !status || status === 502 || status === 503 || status === 504;
+
+        if (!isTemporaryFailure || attempt === 2) {
+          console.error("Error fetching videos:", error);
+          return [];
+        }
+
+        // Railway may briefly return a gateway error while the service wakes
+        // up or restarts. Give it a moment before trying again.
+        await wait(1000 * (attempt + 1));
+      }
     }
+
+    return [];
   },
 
   saveVideo: async (videoId: string) => {

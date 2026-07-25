@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 export const dynamic = 'force-dynamic';
 import {
-  FiArrowLeft, FiShare2, FiDownload, FiPlay, FiPause,
+  FiArrowLeft, FiShare2, FiPlay, FiPause,
   FiVolume2, FiVolumeX, FiChevronUp, FiChevronDown,
 } from "react-icons/fi";
 
@@ -17,6 +17,7 @@ const getFullUrl = (url: string) => url.startsWith('/') ? `${API_BASE_URL}${url}
 interface Video {
   id: string;
   video_url: string;
+  video_url_mp4?: string;
   title: string;
   short_description: string;
   thumbnail_url: string;
@@ -60,7 +61,8 @@ function WatchContent() {
   const [touchStart, setTouchStart] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [showPlayIcon, setShowPlayIcon] = useState<boolean>(false);
-  const [isMuted, setIsMuted] = useState<boolean>(false);
+  // Browsers only allow reliable autoplay when media starts muted.
+  const [isMuted, setIsMuted] = useState<boolean>(true);
   const [isBuffering, setIsBuffering] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
@@ -98,6 +100,23 @@ function WatchContent() {
     setDuration(0);
   }, [currentIndex]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    const currentVideo = videos[currentIndex];
+
+    if (!video || !currentVideo) return;
+
+    video.autoplay = true;
+    video.defaultMuted = true;
+    video.muted = true;
+    setIsMuted(true);
+    video.play().catch(() => {
+      setIsBuffering(false);
+      setIsPlaying(false);
+      setShowPlayIcon(true);
+    });
+  }, [currentIndex, videos]);
+
   const handleTimeUpdate = () => {
     const video = videoRef.current;
     if (video) {
@@ -110,6 +129,22 @@ function WatchContent() {
     const video = videoRef.current;
     if (video) {
       setDuration(video.duration || 0);
+    }
+  };
+
+  const handleCanPlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    setIsBuffering(false);
+    if (video.paused) {
+      video.play().then(() => {
+        setIsPlaying(true);
+        setShowPlayIcon(false);
+      }).catch(() => {
+        setIsPlaying(false);
+        setShowPlayIcon(true);
+      });
     }
   };
 
@@ -219,24 +254,6 @@ function WatchContent() {
     }
   };
 
-  const handleDownload = async () => {
-    try {
-      const currentVideo = videos[currentIndex];
-
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = getFullUrl(currentVideo.video_url);
-      a.download = `${currentVideo.title.replace(/\s+/g, "_")}.mp4`;
-      a.target = "_blank";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error("Download failed", err);
-      alert("Failed to save/download video.");
-    }
-  };
-
   if (isLoading) {
     return <div className="min-h-screen bg-neutral-900 flex items-center justify-center text-white">Loading...</div>;
   }
@@ -277,38 +294,30 @@ function WatchContent() {
               <video
                 ref={videoRef}
                 key={videos[currentIndex].id}
-                src={getFullUrl(videos[currentIndex].video_url)}
+                src={getFullUrl(
+                  videos[currentIndex].video_url_mp4 ??
+                    videos[currentIndex].video_url,
+                )}
                 className="w-full h-full object-cover cursor-pointer"
                 autoPlay
                 loop
                 muted={isMuted}
                 playsInline
                 controls={false}
-                preload="auto"
+                preload="metadata"
+                poster={getFullUrl(videos[currentIndex].thumbnail_url)}
                 onWaiting={() => setIsBuffering(true)}
                 onPlaying={() => setIsBuffering(false)}
-                onCanPlay={() => setIsBuffering(false)}
+                onCanPlay={handleCanPlay}
                 onLoadedData={() => setIsBuffering(false)}
+                onError={() => {
+                  setIsBuffering(false);
+                  setIsPlaying(false);
+                  setShowPlayIcon(true);
+                }}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleLoadedMetadata}
               />
-              {/* Preload Previous and Next Videos in the background */}
-              {currentIndex > 0 && (
-                <video
-                  src={getFullUrl(videos[currentIndex - 1].video_url)}
-                  preload="auto"
-                  className="hidden"
-                  muted
-                />
-              )}
-              {currentIndex < videos.length - 1 && (
-                <video
-                  src={getFullUrl(videos[currentIndex + 1].video_url)}
-                  preload="auto"
-                  className="hidden"
-                  muted
-                />
-              )}
               <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
 
               <AnimatePresence>
@@ -335,9 +344,9 @@ function WatchContent() {
                   >
                     <div className="w-20 h-20 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center">
                       {isPlaying ? (
-                        <FiPlay className="text-white text-3xl" />
-                      ) : (
                         <FiPause className="text-white text-3xl" />
+                      ) : (
+                        <FiPlay className="text-white text-3xl" />
                       )}
                     </div>
                   </motion.div>
@@ -472,16 +481,6 @@ function WatchContent() {
                   <span className="text-white text-[10px] font-bold drop-shadow-md">Share</span>
                 </motion.button>
 
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  className="flex flex-col items-center gap-1.5 drop-shadow-lg cursor-pointer"
-                  onClick={handleDownload}
-                >
-                  <div className="w-12 h-12 bg-black/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center hover:bg-[#16a34a] hover:border-[#16a34a] transition-all group">
-                    <FiDownload className="text-white group-hover:text-white text-xl" />
-                  </div>
-                  <span className="text-white text-[10px] font-bold drop-shadow-md">Save</span>
-                </motion.button>
               </div>
             </div>
           </motion.div>

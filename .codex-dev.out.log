@@ -1,0 +1,10 @@
+
+> ryzr-exchange-website@0.1.0 dev
+> node --max-old-space-size=512 ./node_modules/next/dist/bin/next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://172.16.0.2:3001
+- Environments: .env
+✓ Ready in 759ms
+[?25h
