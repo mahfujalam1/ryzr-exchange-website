@@ -39,6 +39,11 @@ export const metadata: Metadata = {
   creator: "Ryzr Exchange",
   publisher: "Ryzr Exchange",
   metadataBase: new URL("https://ryzrexchange.com"),
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
   alternates: {
     canonical: "/",
   },
@@ -51,18 +56,16 @@ export const metadata: Metadata = {
     siteName: "Ryzr Exchange",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&q=80&w=1200&h=630",
-        width: 1200,
-        height: 630,
-        alt: "Ryzr Exchange Aviation Community",
+        url: "/favicon.ico",
+        alt: "Ryzr Exchange",
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Ryzr Exchange | Your Aviation Career Starts Here",
     description: "Real training. Real opportunities. A global community for Gen Z dreamers.",
-    images: ["https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&q=80&w=1200&h=630"],
+    images: ["/favicon.ico"],
   },
   robots: {
     index: true,
