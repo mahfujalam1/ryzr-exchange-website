@@ -67,21 +67,47 @@ export default function GoogleSignInButton() {
       return;
     }
 
+    const buttonElement = buttonRef.current;
+    let renderedWidth = 0;
+    let animationFrame = 0;
+
     window.google.accounts.id.initialize({
       client_id: CLIENT_ID,
       callback: handleCredential,
     });
 
-    buttonRef.current.replaceChildren();
-    window.google.accounts.id.renderButton(buttonRef.current, {
-      type: "standard",
-      theme: "outline",
-      size: "large",
-      text: "continue_with",
-      shape: "rectangular",
-      logo_alignment: "center",
-      width: Math.min(buttonRef.current.clientWidth, 400),
+    const renderButton = () => {
+      const nextWidth = Math.floor(Math.min(buttonElement.clientWidth, 400));
+
+      if (nextWidth <= 0 || nextWidth === renderedWidth || !window.google) {
+        return;
+      }
+
+      renderedWidth = nextWidth;
+      buttonElement.replaceChildren();
+      window.google.accounts.id.renderButton(buttonElement, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
+        shape: "rectangular",
+        logo_alignment: "center",
+        width: nextWidth,
+      });
+    };
+
+    renderButton();
+
+    const resizeObserver = new ResizeObserver(() => {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = requestAnimationFrame(renderButton);
     });
+    resizeObserver.observe(buttonElement);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      resizeObserver.disconnect();
+    };
   }, [handleCredential, scriptReady]);
 
   return (
@@ -93,7 +119,7 @@ export default function GoogleSignInButton() {
       />
       <div
         ref={buttonRef}
-        className={`min-h-11 flex justify-center ${isLoading ? "pointer-events-none opacity-60" : ""}`}
+        className={`w-full min-w-0 min-h-11 overflow-hidden flex justify-center ${isLoading ? "pointer-events-none opacity-60" : ""}`}
         aria-busy={isLoading}
       />
       {error && (

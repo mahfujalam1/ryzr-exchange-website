@@ -8,10 +8,6 @@ import { FiChevronLeft, FiChevronRight, FiPlay } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-
 import { fetchVideos } from "@/actions";
 import { useState, useEffect } from "react";
 

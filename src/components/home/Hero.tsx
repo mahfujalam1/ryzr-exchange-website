@@ -96,9 +96,9 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Side: Copy and Quick Registration Form */}
-          <div className="lg:col-span-6 flex flex-col items-start gap-5 max-w-xl mx-auto lg:mx-0">
+          <div className="w-full min-w-0 lg:col-span-6 flex flex-col items-start gap-5 max-w-xl mx-auto lg:mx-0">
             {/* Top Badge */}
             <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 border border-emerald-500/25 text-[#047857] rounded-full text-[8px] md:text-[11px] font-extrabold tracking-wider uppercase">
               <span>The future takes off with you</span>
@@ -123,7 +123,7 @@ export default function Hero() {
             </p>
 
             {/* Quick Phone Sign Up Card */}
-            <div className="w-full max-w-[450px] mx-auto md:mx-0 bg-white rounded-2xl border border-emerald-600/40 p-4 sm:p-6 lg:p-7 shadow-xl shadow-emerald-950/[0.03] relative">
+            <div className="w-full min-w-0 max-w-[450px] mx-auto md:mx-0 bg-white rounded-2xl border border-emerald-600/40 p-4 sm:p-6 lg:p-7 shadow-xl shadow-emerald-950/[0.03] relative">
               <h2 className="text-[11px] sm:text-xs font-bold text-[#047857] tracking-wider uppercase mb-4 text-center sm:text-left leading-relaxed">
                 Join Ryzr Exchange - It's Free!
               </h2>
