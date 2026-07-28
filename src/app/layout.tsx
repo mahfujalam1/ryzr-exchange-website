@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Montserrat, Permanent_Marker } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",

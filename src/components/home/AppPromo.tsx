@@ -7,12 +7,12 @@ export default function AppPromo() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Side: App Details */}
           <div className="lg:col-span-6 flex flex-col items-start gap-6 max-w-xl mx-auto lg:mx-0">
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-[#16a34a] rounded-full text-xs font-bold tracking-wide uppercase">
+            {/* <div className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 border border-emerald-100 text-[#16a34a] rounded-full text-xs font-bold tracking-wide uppercase">
               <FiDownload className="text-sm shrink-0" />
               <span>Download Now</span>
-            </div>
+            </div> */}
 
-            <h2 className="text-3xl sm:text-4xl lg:text-[52px] font-bold text-neutral-900 tracking-tight leading-tight uppercase text-left">
+            <h2 className="text-2xl sm:text-4xl lg:text-[52px] font-bold text-neutral-900 tracking-tight leading-tight uppercase text-left">
               Take Your Aviation <br />
               <span
                 className="block italic text-[#16a34a] font-normal [font-synthesis:none]"
